@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const value: string = 'Hello, world';
+import Button from "primevue/button"
 </script>
 
 <template>
-  <h1 class="text-red-950 text-2xl font-bold">{{ value }}</h1>
+  <Button label="Test"></Button>
 </template>
