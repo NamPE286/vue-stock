@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import Button from "primevue/button"
+import NavBar from "./components/NavBar.vue"
 </script>
 
 <template>
-  <Button label="Test"></Button>
+  <div class="fixed w-[100px] h-full p-[10px]">
+    <NavBar/>
+  </div>
+
+  <div>
+
+  </div>
 </template>
