@@ -2,6 +2,7 @@
 import Button from 'primevue/button'
 import Divider from 'primevue/divider'
 import Avatar from 'primevue/avatar'
+import Div from './Div.vue'
 
 interface Link {
   url: string
@@ -15,9 +16,7 @@ const links: Link[] = [
 </script>
 
 <template>
-  <div
-    class="w-full h-full rounded-2xl p-5 bg-[#f8fafc] dark:bg-[#18181b] flex flex-col justify-between"
-  >
+  <Div class="w-full h-full flex flex-col justify-between">
     <div class="flex flex-col h-[100%]">
       <div class="flex flex-col gap-1 items-center">
         <img class="h-[20px] mb-[10px]" src="/src/assets/logo.ico" alt="logo">
@@ -41,5 +40,5 @@ const links: Link[] = [
         </a>
       </div>
     </div>
-  </div>
+  </Div>
 </template>
