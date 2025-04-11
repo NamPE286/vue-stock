@@ -19,8 +19,9 @@ const links: Link[] = [
     class="w-full h-full rounded-2xl p-5 bg-[#f8fafc] dark:bg-[#18181b] flex flex-col justify-between"
   >
     <div class="flex flex-col h-[100%]">
-      <div class="flex flex-col gap-1">
-        <div v-for="link in links" :key="link">
+      <div class="flex flex-col gap-1 items-center">
+        <img class="h-[20px] mb-[10px]" src="/src/assets/logo.ico" alt="logo">
+        <div v-for="link in links" :key="link.url">
           <a :href="link.url">
             <Button class="w-full aspect-square" variant="text">
               <span :class="`pi ${link.icon}`" style="font-size: 1rem"></span>
