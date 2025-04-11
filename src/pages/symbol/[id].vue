@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SymbolHeader from '@/components/symbol/SymbolHeader.vue'
+import SymbolOverview from '@/components/symbol/SymbolOverview.vue'
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
@@ -18,7 +19,9 @@ import TabPanel from 'primevue/tabpanel'
       </TabList>
     </div>
     <TabPanels class="h-[1000px]">
-      <TabPanel value="0"> a </TabPanel>
+      <TabPanel value="0">
+        <SymbolOverview />
+      </TabPanel>
       <TabPanel value="1"> b </TabPanel>
       <TabPanel value="2"> c </TabPanel>
     </TabPanels>
@@ -28,7 +31,6 @@ import TabPanel from 'primevue/tabpanel'
 <style lang="css" scoped>
 .p-tabpanels {
   background: transparent;
-
 }
 
 .p-tablist * {
