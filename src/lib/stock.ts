@@ -22,11 +22,6 @@ export interface Stock {
 
 const socket = new WebSocket(`wss://ws.finnhub.io?token=${import.meta.env.VITE_FH_KEY}`);
 
-function formatDate(date: Date) {
-  const [month, day, year] = date.toLocaleDateString('en-US').split('/');
-  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-}
-
 export async function getSymbolName(symbol: string): Promise<string> {
   const res = await fetch(`https://finnhub.io/api/v1/search?q=${symbol}&token=${import.meta.env.VITE_FH_KEY}`);
   const data = await res.json();
@@ -40,9 +35,11 @@ export async function getSymbolHistoricalCandles(symbol: string): Promise<Candle
 
   yesterday.setDate(yesterday.getDate() - 1);
 
-  const res = await fetch(`https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/minute/${formatDate(yesterday)}/${formatDate(today)}?adjusted=true&sort=asc&limit=50000&apiKey=${import.meta.env.VITE_POLYGON_KEY}`);
+  const res = await fetch(`https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/minute/${yesterday.getTime()}/${today.getTime() - 1000}?adjusted=true&sort=asc&limit=50000&apiKey=${import.meta.env.VITE_POLYGON_KEY}`);
   const data = await res.json();
   const result: Candle[] = [];
+
+  console.log(result);
 
   for (const entry of data.results) {
     result.push({
@@ -83,5 +80,17 @@ export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: Stoc
 
   socket.addEventListener('message', function (event) {
     console.log(event.data);
+    const data = event.data;
+
+    callbackFn({
+      price: data.c,
+      change: data.d,
+      percentChange: data.dp,
+      high: data.h,
+      low: data.l,
+      open: data.o,
+      previousClose: data.pc,
+      timestamp: new Date(data.t * 1000),
+    });
   });
 }

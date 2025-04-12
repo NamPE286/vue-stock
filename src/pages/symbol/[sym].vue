@@ -17,14 +17,19 @@ let current = ref<Stock | null>(null);
 let name = ref<string>(sym);
 let candles: Candle[] = []
 
-function updatePrice(stock: Stock) {}
+function updatePrice(stock: Stock) {
+  current.value = stock;
+}
 
 onMounted(() => {
   getSymbolPrice(sym).then((data) => {
     current.value = data;
   });
   subscribeToPriceUpdates(sym, updatePrice);
-  // console.log(await getSymbolHistoricalCandles(sym))
+  // getSymbolHistoricalCandles(sym).then((data) => {
+  //   candles = data;
+  //   console.log(candles);
+  // })
 });
 </script>
 
