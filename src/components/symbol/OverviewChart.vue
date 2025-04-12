@@ -4,7 +4,6 @@ import type { Candle } from '@/lib/stock';
 import type { IChartApi } from 'lightweight-charts';
 import { onMounted, watch } from 'vue';
 import ToggleSwitch from 'primevue/toggleswitch';
-import { ref } from 'process';
 
 const props = defineProps<{
   data: Candle[];

@@ -2,6 +2,7 @@
 import type { Candle } from '@/lib/stock';
 import OverviewChart from './OverviewChart.vue';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   data: Candle[];
 }>();

@@ -18,8 +18,9 @@ const arr: string[] = ['NASDAQ'];
         <h3 class="font-bold text-xl">{{ name }}</h3>
         <p>
           <span v-if="data !== null" class="text-3xl font-bold">
-            {{ data.price }} USD
+            {{ data.price }}
           </span>
+          USD
           <Skeleton v-if="data === null" class="mt-[3px]" width="12rem" height="2.5rem"></Skeleton>
           <span v-if="data !== null">
             <span v-if="data.change >= 0" class="font-bold text-green-500 text-lg">
