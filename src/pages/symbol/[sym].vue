@@ -9,13 +9,14 @@ import TabPanel from 'primevue/tabpanel';
 import { getSymbolHistoricalCandles, subscribeToPriceUpdates, getSymbolPrice } from '@/lib/stock';
 import type { Candle, Stock } from '@/lib/stock';
 import { ref, onMounted } from 'vue';
+import type { Ref } from 'vue';
 import { useRoute } from 'vue-router/auto';
 
 const route = useRoute('/symbol/[sym]');
 const sym = route.params.sym.toUpperCase();
 let current = ref<Stock | null>(null);
 let name = ref<string>(sym);
-let candles: Candle[] = []
+let candles: Ref<Candle[]> = ref([]);
 
 function updatePrice(stock: Stock) {
   current.value = stock;
@@ -26,16 +27,15 @@ onMounted(() => {
     current.value = data;
   });
   subscribeToPriceUpdates(sym, updatePrice);
-  // getSymbolHistoricalCandles(sym).then((data) => {
-  //   candles = data;
-  //   console.log(candles);
-  // })
+  getSymbolHistoricalCandles(sym).then((data) => {
+    candles.value = data;
+  })
 });
 </script>
 
 <template>
   <Tabs value="0">
-    <div class="sticky pt-[10px] mt-[-10px] top-0 bg-[#ffffff] dark:bg-[#121212]">
+    <div class="sticky pt-[10px] z-2 mt-[-10px] top-0 bg-[#ffffff] dark:bg-[#121212]">
       <SymbolHeader :name="name" :data="current"></SymbolHeader>
       <TabList>
         <Tab value="0">Overview</Tab>
@@ -43,9 +43,9 @@ onMounted(() => {
         <Tab value="2">Discussions</Tab>
       </TabList>
     </div>
-    <TabPanels class="h-[1000px]">
+    <TabPanels>
       <TabPanel value="0">
-        <SymbolOverview />
+        <SymbolOverview :data="candles" />
       </TabPanel>
       <TabPanel value="1"> b </TabPanel>
       <TabPanel value="2"> c </TabPanel>

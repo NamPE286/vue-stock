@@ -39,8 +39,6 @@ export async function getSymbolHistoricalCandles(symbol: string): Promise<Candle
   const data = await res.json();
   const result: Candle[] = [];
 
-  console.log(result);
-
   for (const entry of data.results) {
     result.push({
       timestamp: new Date(entry.t),
@@ -79,12 +77,11 @@ export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: Stoc
   });
 
   socket.addEventListener('message', function (event) {
-    console.log(event.data);
-    const data = event.data;
-
-    if(event.data.type == 'ping') {
+    if(event.data == '{"type":"ping"}') {
       return;
     }
+
+    const data = event.data.data;
 
     callbackFn({
       price: data.c,
