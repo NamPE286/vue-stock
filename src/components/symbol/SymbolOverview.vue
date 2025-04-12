@@ -10,6 +10,36 @@ const props = defineProps<{
 
 let chart: IChartApi | null = null;
 
+function insertGap(
+  data: {
+    time: number;
+    value: number;
+  }[],
+) {
+  const res: {
+    time: number;
+    value: number;
+  }[] = [];
+
+  for (const i of data) {
+    if (res.length === 0) {
+      res.push(i);
+      continue;
+    }
+
+    while (i.time - res[res.length - 1].time > 60) {
+      res.push({
+        time: res[res.length - 1].time + 60,
+        value: res[res.length - 1].value,
+      });
+    }
+
+    res.push(i);
+  }
+
+  return res;
+}
+
 function updateChart(option = { area: true, candlestick: false }) {
   if (chart === null) {
     return;
@@ -17,7 +47,7 @@ function updateChart(option = { area: true, candlestick: false }) {
 
   if (option.area) {
     const areaData = props.data.map((candle) => ({
-      time: Math.floor(new Date(candle.timestamp).getTime() / 1000),
+      time: Math.floor(new Date(candle.timestamp).getTime() / 1000) - new Date().getTimezoneOffset() * 60,
       value: candle.close,
     }));
 
@@ -27,7 +57,7 @@ function updateChart(option = { area: true, candlestick: false }) {
       bottomColor: 'rgba(41, 98, 255, 0.28)',
     });
     // @ts-ignore
-    areaSeries.setData(areaData);
+    areaSeries.setData(insertGap(areaData));
   }
 
   if (option.candlestick) {
@@ -99,7 +129,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h2>AAPL Chart</h2>
+  <h2>AAPL Chart (last trading day)</h2>
   <div id="chart" class="w-full h-[400px]"></div>
 </template>
 
