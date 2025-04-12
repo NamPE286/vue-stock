@@ -4,13 +4,17 @@ import type { Candle } from '@/lib/stock';
 import type { IChartApi } from 'lightweight-charts';
 import { onMounted, watch } from 'vue';
 import ToggleSwitch from 'primevue/toggleswitch';
+import Div from '../Div.vue';
+import { ref } from 'vue';
 
 const props = defineProps<{
   data: Candle[];
 }>();
 
+const map = new Map<number, Candle>();
 let chart: IChartApi | null = null;
 let checked = false;
+let tooltipData = ref<Candle | null>(null);
 
 function insertGap(
   data: {
@@ -43,8 +47,17 @@ function insertGap(
 }
 
 function updateChart(option = { area: true, candlestick: false }) {
+  map.clear();
+
   if (chart !== null) {
     chart?.remove();
+  }
+
+  for (const i of props.data) {
+    map.set(
+      Math.floor(new Date(i.timestamp).getTime() / 1000) - new Date().getTimezoneOffset() * 60,
+      i,
+    );
   }
 
   // @ts-ignore
@@ -63,45 +76,66 @@ function updateChart(option = { area: true, candlestick: false }) {
       horzLines: {
         visible: false,
       },
-    }
+    },
+  });
+  const areaData = props.data.map((candle) => ({
+    time:
+      Math.floor(new Date(candle.timestamp).getTime() / 1000) - new Date().getTimezoneOffset() * 60,
+    value: candle.close,
+  }));
+
+  const areaSeries = chart.addSeries(AreaSeries, {
+    lineColor: '#2962FF',
+    topColor: '#2962FF',
+    bottomColor: 'rgba(41, 98, 255, 0.28)',
+  });
+
+  const candlestickData = props.data.map((candle) => ({
+    time:
+      Math.floor(new Date(candle.timestamp).getTime() / 1000) - new Date().getTimezoneOffset() * 60,
+    open: candle.open,
+    high: candle.high,
+    low: candle.low,
+    close: candle.close,
+  }));
+
+  const candlestickSeries = chart.addSeries(CandlestickSeries, {
+    upColor: '#26a69a',
+    downColor: '#ef5350',
+    borderVisible: false,
+    wickUpColor: '#26a69a',
+    wickDownColor: '#ef5350',
   });
 
   if (option.area) {
-    const areaData = props.data.map((candle) => ({
-      time:
-        Math.floor(new Date(candle.timestamp).getTime() / 1000) -
-        new Date().getTimezoneOffset() * 60,
-      value: candle.close,
-    }));
-
-    const areaSeries = chart.addSeries(AreaSeries, {
-      lineColor: '#2962FF',
-      topColor: '#2962FF',
-      bottomColor: 'rgba(41, 98, 255, 0.28)',
-    });
     // @ts-ignore
     areaSeries.setData(insertGap(areaData));
   }
 
   if (option.candlestick) {
-    const candlestickData = props.data.map((candle) => ({
-      time: Math.floor(new Date(candle.timestamp).getTime() / 1000),
-      open: candle.open,
-      high: candle.high,
-      low: candle.low,
-      close: candle.close,
-    }));
-
-    const candlestickSeries = chart.addSeries(CandlestickSeries, {
-      upColor: '#26a69a',
-      downColor: '#ef5350',
-      borderVisible: false,
-      wickUpColor: '#26a69a',
-      wickDownColor: '#ef5350',
-    });
     // @ts-ignore
     candlestickSeries.setData(insertGap(candlestickData));
   }
+
+  chart.subscribeCrosshairMove((param) => {
+    const elem = document.getElementById('chart-tooltips');
+
+    if (!elem || !param.point) {
+      if (elem) {
+        elem.style.display = 'none';
+      }
+
+      return;
+    }
+
+    elem.style.left = `${param.point.x}px`;
+    elem.style.top = `${param.point.y}px`;
+    elem.style.transform = 'translate(150px, 100px)';
+    elem.style.display = 'block';
+
+    const data = param.seriesData.get(option.area ? areaSeries : candlestickSeries);
+    tooltipData.value = map.get(Number(data?.time))!;
+  });
 
   chart.timeScale().applyOptions({
     timeVisible: true,
@@ -140,9 +174,21 @@ onMounted(() => {
 
 <template>
   <div id="chart" class="w-full h-[350px]"></div>
+  <Div id="chart-tooltips" class="text-xs/5 w-[200px] z-3 absolute hidden opacity-85">
+    <div v-if="tooltipData != null">
+      Date: <b class="float-right">{{ new Date(tooltipData.timestamp).toDateString() }}</b><br />
+      Close: <b class="float-right">{{ Math.round(tooltipData.close * 100) / 100 }}</b><br />
+      Open: <b class="float-right">{{ Math.round(tooltipData.open * 100) / 100 }}</b><br />
+      High: <b class="float-right">{{ Math.round(tooltipData.high * 100) / 100 }}</b><br />
+      Low: <b class="float-right">{{ Math.round(tooltipData.low * 100) / 100 }}</b><br />
+      Volume: <b class="float-right">{{ tooltipData.volume }}</b>
+    </div>
+  </Div>
   <div class="flex gap-[10px] w-full justify-center">
     Area
     <ToggleSwitch v-model="checked" @change="changeMode" />
     Candlestick
   </div>
 </template>
+
+<style scoped></style>

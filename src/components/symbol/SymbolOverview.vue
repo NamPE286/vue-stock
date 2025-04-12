@@ -10,12 +10,14 @@ const props = defineProps<{
 
 <template>
   <OverviewChart :data="data"/>
+  <h2>News</h2>
 </template>
 
 <style scoped>
 h2 {
   font-weight: bold;
   font-size: x-large;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 </style>
