@@ -15,13 +15,12 @@ const arr: string[] = ['NASDAQ'];
   <div>
     <div class="flex flex-row gap-[10px] items-center">
       <div>
-        <h3 v-if="name !== ''" class="font-bold text-xl">{{ name }}</h3>
-        <Skeleton v-if="name === ''" class="mb-[5px]" width="10rem" height="2rem"></Skeleton>
+        <h3 class="font-bold text-xl">{{ name }}</h3>
         <p>
           <span v-if="data !== null" class="text-3xl font-bold">
             {{ data.price }} USD
           </span>
-          <Skeleton v-if="data === null" width="12rem" height="2.5rem"></Skeleton>
+          <Skeleton v-if="data === null" class="mt-[3px]" width="12rem" height="2.5rem"></Skeleton>
           <span v-if="data !== null">
             <span v-if="data.change >= 0" class="font-bold text-green-500 text-lg">
               {{ props.data === null ? '' : `+${data?.change} (+${Math.round(data?.percentChange! * 100) / 100}%)` }}

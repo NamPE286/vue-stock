@@ -6,7 +6,7 @@ import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
-import { getSymbolHistoricalCandles, subscribeToPriceUpdates, getSymbolPrice, getSymbolName } from '@/lib/stock';
+import { getSymbolHistoricalCandles, subscribeToPriceUpdates, getSymbolPrice } from '@/lib/stock';
 import type { Candle, Stock } from '@/lib/stock';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router/auto';
@@ -14,15 +14,12 @@ import { useRoute } from 'vue-router/auto';
 const route = useRoute('/symbol/[sym]');
 const sym = route.params.sym.toUpperCase();
 let current = ref<Stock | null>(null);
-let name = ref<string>("");
+let name = ref<string>(sym);
 let candles: Candle[] = []
 
 function updatePrice(stock: Stock) {}
 
 onMounted(() => {
-  getSymbolName(sym).then((data) => {
-    name.value = data + ` (${sym})`;
-  });
   getSymbolPrice(sym).then((data) => {
     current.value = data;
   });
