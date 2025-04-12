@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Stock } from '@/lib/stock';
 import Select from 'primevue/select';
+import Skeleton from 'primevue/skeleton';
 
 const props = defineProps<{
   name: string
@@ -14,12 +15,13 @@ const arr: string[] = ['NASDAQ'];
   <div>
     <div class="flex flex-row gap-[10px] items-center">
       <div>
-        <h3 class="font-bold text-xl">{{ name }}</h3>
+        <h3 v-if="name !== ''" class="font-bold text-xl">{{ name }}</h3>
+        <Skeleton v-if="name === ''" class="mb-[5px]" width="10rem" height="2rem"></Skeleton>
         <p>
-          <span class="text-3xl font-bold">
-            {{ props.data === null ? '-' : data?.price }}
+          <span v-if="data !== null" class="text-3xl font-bold">
+            {{ data.price }} USD
           </span>
-          USD
+          <Skeleton v-if="data === null" width="12rem" height="2.5rem"></Skeleton>
           <span v-if="data !== null">
             <span v-if="data.change >= 0" class="font-bold text-green-500 text-lg">
               {{ props.data === null ? '' : `+${data?.change} (+${Math.round(data?.percentChange! * 100) / 100}%)` }}

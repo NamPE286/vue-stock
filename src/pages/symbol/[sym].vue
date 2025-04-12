@@ -14,7 +14,7 @@ import { useRoute } from 'vue-router/auto';
 const route = useRoute('/symbol/[sym]');
 const sym = route.params.sym.toUpperCase();
 let current = ref<Stock | null>(null);
-let name = ref<string>(`- (${sym})`);
+let name = ref<string>("");
 let candles: Candle[] = []
 
 function updatePrice(stock: Stock) {}
