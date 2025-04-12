@@ -82,6 +82,10 @@ export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: Stoc
     console.log(event.data);
     const data = event.data;
 
+    if(event.data.type == 'ping') {
+      return;
+    }
+
     callbackFn({
       price: data.c,
       change: data.d,
