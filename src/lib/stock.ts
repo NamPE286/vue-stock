@@ -1,18 +1,40 @@
-interface Candle {
+export interface Candle {
   timestamp: Date;
   open: number;
   high: number;
   low: number;
   close: number;
   volume: number;
+  volumeWeighted: number;
+  transaction: number;
 }
+
+export interface Stock {
+  timestamp: Date;
+  price: number;
+  change: number;
+  percentChange: number;
+  high: number;
+  low: number;
+  open: number;
+  previousClose: number;
+}
+
+const socket = new WebSocket(`wss://ws.finnhub.io?token=${import.meta.env.VITE_FH_KEY}`);
 
 function formatDate(date: Date) {
   const [month, day, year] = date.toLocaleDateString('en-US').split('/');
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 }
 
-export async function getSymbolHistoricalCandles(symbol: string) {
+export async function getSymbolName(symbol: string): Promise<string> {
+  const res = await fetch(`https://finnhub.io/api/v1/search?q=${symbol}&token=${import.meta.env.VITE_FH_KEY}`);
+  const data = await res.json();
+
+  return data.result[0].description;
+}
+
+export async function getSymbolHistoricalCandles(symbol: string): Promise<Candle[]> {
   const today = new Date();
   const yesterday = new Date(today);
 
@@ -22,7 +44,7 @@ export async function getSymbolHistoricalCandles(symbol: string) {
   const data = await res.json();
   const result: Candle[] = [];
 
-  for(const entry of data.results) {
+  for (const entry of data.results) {
     result.push({
       timestamp: new Date(entry.t),
       open: entry.o,
@@ -30,12 +52,36 @@ export async function getSymbolHistoricalCandles(symbol: string) {
       low: entry.l,
       close: entry.c,
       volume: entry.v,
-    })
+      volumeWeighted: entry.vw,
+      transaction: entry.n,
+    });
   }
 
   return result;
 }
 
-export function subscribeToCandleUpdates(symbol: string, callbackFn: (candle: Candle) => void) {
-  // TODO
+export async function getSymbolPrice(symbol: string): Promise<Stock> {
+  const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${import.meta.env.VITE_FH_KEY}`);
+  const data = await res.json();
+
+  return {
+    price: data.c,
+    change: data.d,
+    percentChange: data.dp,
+    high: data.h,
+    low: data.l,
+    open: data.o,
+    previousClose: data.pc,
+    timestamp: new Date(data.t * 1000),
+  };
+}
+
+export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: Stock) => void) {
+  socket.addEventListener('open', function () {
+    socket.send(JSON.stringify({ type: 'subscribe', symbol: symbol }));
+  });
+
+  socket.addEventListener('message', function (event) {
+    console.log(event.data);
+  });
 }

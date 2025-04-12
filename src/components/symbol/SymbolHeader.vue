@@ -1,28 +1,36 @@
 <script setup lang="ts">
-import Select from 'primevue/select'
+import type { Stock } from '@/lib/stock';
+import Select from 'primevue/select';
 
-let selectedOption = 'NASDAQ'
-const arr: string[] = ['NASDAQ', 'A', 'B']
+const props = defineProps<{
+  name: string
+  data: Stock | null;
+}>();
+let market = 'NASDAQ';
+const arr: string[] = ['NASDAQ'];
 </script>
 
 <template>
   <div>
     <div class="flex flex-row gap-[10px] items-center">
-      <img
-        class="h-[50px] w-[50px] rounded-full"
-        src="https://s3-symbol-logo.tradingview.com/apple--big.svg"
-        alt="company logo"
-      />
       <div>
-        <h3 class="font-bold text-xl">Apple Inc. (AAPL)</h3>
-        <p><span class="text-3xl font-bold">200.00</span> USD <span class="font-bold text-green-500 text-lg">+2.23 (+1.22%)</span></p>
+        <h3 class="font-bold text-xl">{{ name }}</h3>
+        <p>
+          <span class="text-3xl font-bold">
+            {{ props.data === null ? '-' : data?.price }}
+          </span>
+          USD
+          <span v-if="data !== null">
+            <span v-if="data.change >= 0" class="font-bold text-green-500 text-lg">
+              {{ props.data === null ? '' : `+${data?.change} (+${Math.round(data?.percentChange! * 100) / 100}%)` }}
+            </span>
+            <span v-if="data.change < 0" class="font-bold text-red-500 text-lg">
+              {{ props.data === null ? '' : `${data?.change} (${Math.round(data?.percentChange! * 100) / 100}%)` }}
+            </span>
+          </span>
+        </p>
       </div>
-      <Select
-        v-model="selectedOption"
-        :options="arr"
-        placeholder="Select a market"
-        class="w-full md:w-56 ml-auto mr-[50px]"
-      ></Select>
+      <Select v-model="market" :options="arr" placeholder="Select a market" class="w-full md:w-56 ml-auto mr-[50px]"></Select>
     </div>
   </div>
 </template>
