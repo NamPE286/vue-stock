@@ -6,6 +6,12 @@ import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
+import { getSymbolHistoricalCandles } from '@/lib/stock'
+import { onMounted } from 'vue'
+
+onMounted(async () => {
+  // console.log(await getSymbolHistoricalCandles("AAPL"))
+})
 </script>
 
 <template>
