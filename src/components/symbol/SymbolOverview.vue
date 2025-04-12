@@ -8,7 +8,6 @@ const props = defineProps<{
 </script>
 
 <template>
-  <h2>AAPL Chart (last trading day)</h2>
   <OverviewChart :data="data"/>
 </template>
 

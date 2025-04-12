@@ -3,12 +3,15 @@ import { AreaSeries, CandlestickSeries, createChart } from 'lightweight-charts';
 import type { Candle } from '@/lib/stock';
 import type { IChartApi } from 'lightweight-charts';
 import { onMounted, watch } from 'vue';
+import ToggleSwitch from 'primevue/toggleswitch';
+import { ref } from 'process';
 
 const props = defineProps<{
   data: Candle[];
 }>();
 
 let chart: IChartApi | null = null;
+let checked = false;
 
 function insertGap(
   data: {
@@ -41,13 +44,34 @@ function insertGap(
 }
 
 function updateChart(option = { area: true, candlestick: false }) {
-  if (chart === null) {
-    return;
+  if (chart !== null) {
+    chart?.remove();
   }
+
+  // @ts-ignore
+  chart = createChart(document.getElementById('chart'), {
+    layout: {
+      textColor: 'white',
+      background: {
+        type: 'solid',
+        color: 'transparent',
+      },
+    },
+    grid: {
+      vertLines: {
+        visible: false,
+      },
+      horzLines: {
+        visible: false,
+      },
+    }
+  });
 
   if (option.area) {
     const areaData = props.data.map((candle) => ({
-      time: Math.floor(new Date(candle.timestamp).getTime() / 1000) - new Date().getTimezoneOffset() * 60,
+      time:
+        Math.floor(new Date(candle.timestamp).getTime() / 1000) -
+        new Date().getTimezoneOffset() * 60,
       value: candle.close,
     }));
 
@@ -77,7 +101,7 @@ function updateChart(option = { area: true, candlestick: false }) {
       wickDownColor: '#ef5350',
     });
     // @ts-ignore
-    candlestickSeries.setData(candlestickData);
+    candlestickSeries.setData(insertGap(candlestickData));
   }
 
   chart.timeScale().applyOptions({
@@ -97,37 +121,29 @@ watch(
 
 window.addEventListener('resize', () => {
   if (chart) {
-    chart.resize(document.getElementById('chart')?.clientWidth || 0, 400);
+    chart.resize(document.getElementById('chart')?.clientWidth || 0, 350);
     chart.timeScale().fitContent();
   }
 });
 
-onMounted(() => {
-  // @ts-ignore
-  chart = createChart(document.getElementById('chart'), {
-    layout: {
-      textColor: 'white',
-      background: {
-        type: 'solid',
-        color: 'transparent',
-      },
-    },
-    grid: {
-      vertLines: {
-        visible: false,
-      },
-      horzLines: {
-        visible: false,
-      },
-    },
-    handleScroll: false,
-    handleScale: false,
-  });
+function changeMode() {
+  if (checked) {
+    updateChart({ area: false, candlestick: true });
+  } else {
+    updateChart({ area: true, candlestick: false });
+  }
+}
 
-  updateChart();
+onMounted(() => {
+  updateChart({ area: true, candlestick: false });
 });
 </script>
 
 <template>
-  <div id="chart" class="w-full h-[400px]"></div>
+  <div id="chart" class="w-full h-[350px]"></div>
+  <div class="flex gap-[10px] w-full justify-center">
+    Area
+    <ToggleSwitch v-model="checked" @change="changeMode" />
+    Candlestick
+  </div>
 </template>
