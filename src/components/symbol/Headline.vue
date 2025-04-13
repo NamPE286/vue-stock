@@ -36,7 +36,7 @@ function timeAgoFromNow(date: Date) {
 <template>
   <a :href="data.url" target="_blank">
     <div
-      class="flex items-center</a> gap-[20px] h-[100px] hover:bg-[#d8dadb] dark:hover:bg-[#26262b] rounded-2xl duration-200 ease-in-out p-[10px]"
+      class="flex items-center gap-[20px] h-[100px] hover:bg-[#d8dadb] dark:hover:bg-[#26262b] rounded-2xl duration-200 ease-in-out p-[10px]"
     >
       <div class="w-full">
         <h3 class="text-lg font-bold">
