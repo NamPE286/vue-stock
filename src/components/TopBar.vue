@@ -14,6 +14,7 @@ interface Link {
 const links: Link[] = [
   { url: '/', icon: 'pi-home', title: 'Dashboard' },
   { url: '/chat', icon: 'pi-comments', title: 'Discussion' },
+  { url: '/settings', icon: 'pi-cog', title: 'Settings' },
 ];
 
 let drawerVisible = ref(false);
