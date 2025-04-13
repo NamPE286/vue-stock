@@ -136,7 +136,7 @@ function updateChart(option = { area: true, candlestick: false }) {
 
     elem.style.left = `${param.point.x}px`;
     elem.style.top = `${param.point.y}px`;
-    elem.style.transform = 'translate(150px, 100px)';
+    elem.style.transform = 'translate(30px, -50px)';
     elem.style.display = 'block';
 
     const data = param.seriesData.get(option.area ? areaSeries : candlestickSeries);
@@ -196,7 +196,7 @@ onMounted(() => {
     <ToggleSwitch v-model="checked" @change="changeMode" />
     Candlestick
   </div>
-  <Div id="chart-tooltips" class="text-xs/5 w-[200px] z-3 absolute hidden opacity-85">
+  <Div id="chart-tooltips" class="text-xs/5 w-[200px] z-3 absolute hidden opacity-80">
     <div v-if="tooltipData != null">
       Date: <b class="float-right">{{ formatDate(new Date(tooltipData.timestamp)) }}</b
       ><br />
