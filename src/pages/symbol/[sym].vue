@@ -6,7 +6,7 @@ import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
-import { getSymbolHistoricalCandles, subscribeToPriceUpdates, getSymbolPrice } from '@/lib/stock';
+import { getSymbolHistoricalCandles, subscribeToPriceUpdates, getSymbolPrice, getSymbolNews } from '@/lib/stock';
 import type { Candle, Stock } from '@/lib/stock';
 import { ref, onMounted } from 'vue';
 import type { Ref } from 'vue';
@@ -30,6 +30,10 @@ onMounted(() => {
   getSymbolHistoricalCandles(sym).then((data) => {
     candles.value = data;
   })
+
+  getSymbolNews(sym).then((data) => {
+    console.log(data)
+  });
 });
 </script>
 
