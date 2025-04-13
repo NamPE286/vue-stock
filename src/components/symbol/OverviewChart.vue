@@ -47,6 +47,10 @@ function insertGap(
 }
 
 function updateChart(option = { area: true, candlestick: false }) {
+  if(props.data.length == 0) {
+    return
+  }
+
   map.clear();
 
   if (chart !== null) {
@@ -60,6 +64,7 @@ function updateChart(option = { area: true, candlestick: false }) {
     );
   }
 
+  const isProfit = (props.data[props.data.length - 1].close > props.data[0].close);
   // @ts-ignore
   chart = createChart(document.getElementById('chart'), {
     layout: {
@@ -85,9 +90,9 @@ function updateChart(option = { area: true, candlestick: false }) {
   }));
 
   const areaSeries = chart.addSeries(AreaSeries, {
-    lineColor: '#2962FF',
-    topColor: '#2962FF',
-    bottomColor: 'rgba(41, 98, 255, 0.28)',
+    lineColor: isProfit ? '#00aa76' : '#ca0a22',
+    topColor: isProfit ? '#00aa76' : '#ca0a22',
+    bottomColor: isProfit ? 'rgba(0, 170, 118, 0.28)' : 'rgba(202, 10, 34, 0.28)',
   });
 
   const candlestickData = props.data.map((candle) => ({

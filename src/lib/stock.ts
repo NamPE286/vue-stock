@@ -116,5 +116,5 @@ export async function getSymbolNews(symbol: string) {
   );
   const data = await res.json();
 
-  console.log(data)
+  return data;
 }
