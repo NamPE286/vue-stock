@@ -7,11 +7,12 @@ import Div from './Div.vue';
 interface Link {
   url: string;
   icon: string;
+  title: string;
 }
 
 const links: Link[] = [
-  { url: '/', icon: 'pi-home' },
-  { url: '/chat', icon: 'pi-comments' },
+  { url: '/', icon: 'pi-home', title: 'Dashboard' },
+  { url: '/chat', icon: 'pi-comments', title: 'Discussion' },
 ];
 </script>
 
@@ -24,7 +25,16 @@ const links: Link[] = [
         </a>
         <div v-for="link in links" :key="link.url">
           <a :href="link.url">
-            <Button class="w-full aspect-square" variant="text">
+            <Button
+              v-tooltip="{
+                value: link.title,
+                pt: {
+                  root: 'ml-[25px]',
+                },
+              }"
+              class="w-full aspect-square"
+              variant="text"
+            >
               <span :class="`pi ${link.icon}`" style="font-size: 1rem"></span>
             </Button>
           </a>
@@ -32,12 +42,29 @@ const links: Link[] = [
       </div>
       <div class="flex flex-col mt-auto justify-center items-center">
         <a href="/settings" class="flex flex-col">
-          <Button class="w-full aspect-square" variant="text">
+          <Button
+            v-tooltip="{
+              value: 'Settings',
+              pt: {
+                root: 'ml-[25px]',
+              },
+            }"
+            class="w-full aspect-square"
+            variant="text"
+          >
             <span :class="`pi pi-cog`" style="font-size: 1rem"></span>
           </Button>
         </a>
         <Divider />
-        <a href="/profile">
+        <a
+          href="/profile"
+          v-tooltip="{
+            value: 'Profile',
+            pt: {
+              root: 'ml-[25px]',
+            },
+          }"
+        >
           <Avatar icon="pi pi-user" shape="circle" />
         </a>
       </div>
