@@ -6,6 +6,7 @@ import Headline from './Headline.vue';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   chartData: CandleData[];
+  
 }>();
 </script>
 

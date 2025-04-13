@@ -20,7 +20,17 @@ export interface StockData {
   previousClose: number;
 }
 
-
+export interface HeadlineData {
+  category: string;
+  time: Date;
+  headline: string;
+  id: number;
+  image: string;
+  related: string;
+  source: string;
+  summary: string;
+  url: string;
+}
 
 const socket = new WebSocket(`wss://ws.finnhub.io?token=${import.meta.env.VITE_FH_KEY}`);
 
@@ -111,14 +121,27 @@ export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: Stoc
 }
 
 export async function getSymbolNews(symbol: string) {
-  const end = new Date()
-  const start = new Date(end.getTime() - 7 * 86400000)
+  const end = new Date();
+  const start = new Date(end.getTime() - 7 * 86400000);
   const res = await fetch(
     `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=${start.toISOString().split('T')[0]}&to=${end.toISOString().split('T')[0]}&token=${import.meta.env.VITE_FH_KEY}`,
   );
   const data = await res.json();
+  const result: HeadlineData[] = [];
 
-  console.log(start, end, data)
-
-  return data;
+  for (const entry of data) {
+    result.push({
+      category: entry.category,
+      time: new Date(entry.datetime * 1000),
+      headline: entry.headline,
+      id: entry.id,
+      image: entry.image,
+      related: entry.related,
+      source: entry.source,
+      summary: entry.summary,
+      url: entry.url,
+    });
+  }
+  
+  return result;
 }
