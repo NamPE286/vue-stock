@@ -34,7 +34,7 @@ onMounted(() => {
 
 <template>
   <Tabs value="overview">
-    <div class="sticky pt-[10px] z-2 mt-[-10px] top-0 bg-[#ffffff] dark:bg-[#121212]">
+    <div class="sticky pt-[10px] z-2 mt-[-10px] top-[65px] md:top-0 bg-[#ffffff] dark:bg-[#121212]">
       <SymbolHeader :profile="profile" :data="current"></SymbolHeader>
       <TabList>
         <Tab value="overview">Overview</Tab>

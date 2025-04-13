@@ -12,7 +12,7 @@ let imageLoaded = ref(false);
 </script>
 
 <template>
-  <div>
+  <div class="pl-[15px] md:pl-0">
     <div v-if="profile === null || data === null" class="flex gap-[10px] items-center">
       <Skeleton shape="circle" width="65px" height="65px"></Skeleton>
       <div class="flex flex-col">
@@ -21,13 +21,6 @@ let imageLoaded = ref(false);
       </div>
     </div>
     <div v-else class="flex gap-[10px] items-center">
-      <Skeleton
-        v-if="!imageLoaded"
-        class="mr-[-75px]"
-        shape="circle"
-        width="65px"
-        height="65px"
-      ></Skeleton>
       <img
         class="h-[60px] aspect-square rounded-full"
         :src="profile.logo"
@@ -38,7 +31,7 @@ let imageLoaded = ref(false);
           <h3 v-if="profile" class="font-bold text-xl">
             {{ profile.name }}
             <Badge size="large">{{ profile.ticker }}</Badge>
-            <Badge size="large" class="ml-[5px]">{{ profile.exchange }}</Badge>
+            <Badge size="large" class="ml-[5px] truncate">{{ profile.exchange }}</Badge>
           </h3>
         </div>
         <p>
