@@ -136,7 +136,7 @@ function updateChart(option = { area: true, candlestick: false }) {
 
     elem.style.left = `${param.point.x}px`;
     elem.style.top = `${param.point.y}px`;
-    elem.style.transform = 'translate(30px, -50px)';
+    elem.style.transform = 'translate(30px, 180px)';
     elem.style.display = 'block';
 
     const data = param.seriesData.get(option.area ? areaSeries : candlestickSeries);
