@@ -124,7 +124,12 @@ export async function getSymbolPrice(symbol: string): Promise<StockData> {
 }
 
 export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: StockData) => void) {
+
   socket.addEventListener('open', function () {
+    if (socket.readyState === WebSocket.OPEN) {
+      return;
+    }
+
     socket.send(JSON.stringify({ type: 'subscribe', symbol: symbol }));
   });
 
