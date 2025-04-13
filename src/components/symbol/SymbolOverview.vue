@@ -12,7 +12,7 @@ defineProps<{
 <template>
   <OverviewChart :data="chartData" />
   <h2>Recent News</h2>
-  <div class="flex flex-col gap-[10px]">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-[10px]">
     <Headline v-for="headline in headlines" :key="headline.id" :data="headline" />
   </div>
 </template>
