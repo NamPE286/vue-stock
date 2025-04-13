@@ -49,7 +49,7 @@ onMounted(() => {
     </div>
     <TabPanels>
       <TabPanel value="0">
-        <SymbolOverview :data="candles" />
+        <SymbolOverview :chart-data="candles" />
       </TabPanel>
       <TabPanel value="1"> b </TabPanel>
       <TabPanel value="2"> c </TabPanel>
