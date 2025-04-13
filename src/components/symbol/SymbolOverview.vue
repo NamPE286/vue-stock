@@ -12,7 +12,7 @@ import { ref } from 'vue';
 const props = defineProps<{
   sym: string
 }>()
-const headlineLimit = 4;
+const headlineLimit = 6;
 
 let chartData = ref<CandleData[]>([])
 let headlines=  ref<HeadlineData[]>([])

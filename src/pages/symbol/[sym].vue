@@ -47,8 +47,9 @@ onMounted(() => {
       <TabPanel value="overview">
         <SymbolOverview :sym />
       </TabPanel>
-      <TabPanel value="profile"> b </TabPanel>
-      <TabPanel value="historicalQuotes"> c </TabPanel>
+      <TabPanel value="profile"> Profile </TabPanel>
+      <TabPanel value="news"> News </TabPanel>
+      <TabPanel value="historicalQuotes"> hquote </TabPanel>
     </TabPanels>
   </Tabs>
 </template>

@@ -136,7 +136,7 @@ function updateChart(option = { area: true, candlestick: false }) {
 
     elem.style.left = `${param.point.x}px`;
     elem.style.top = `${param.point.y}px`;
-    elem.style.transform = 'translate(30px, 180px)';
+    elem.style.transform = 'translate(-100px, 50px)';
     elem.style.display = 'block';
 
     const data = param.seriesData.get(option.area ? areaSeries : candlestickSeries);
@@ -190,27 +190,28 @@ onMounted(() => {
 
 <template>
   <Skeleton v-if="data.length == 0" class="w-full mb-[-350px]" height="375px"></Skeleton>
-  <div id="chart" class="w-full h-[350px]"></div>
+  <div id="chart" class="w-full h-[350px] relative">
+    <Div id="chart-tooltips" class="text-xs/5 w-[200px] z-3 absolute hidden opacity-80">
+      <div v-if="tooltipData != null">
+        Date: <b class="float-right">{{ formatDate(new Date(tooltipData.timestamp)) }}</b
+        ><br />
+        Close: <b class="float-right">{{ Math.round(tooltipData.close * 100) / 100 }}</b
+        ><br />
+        Open: <b class="float-right">{{ Math.round(tooltipData.open * 100) / 100 }}</b
+        ><br />
+        High: <b class="float-right">{{ Math.round(tooltipData.high * 100) / 100 }}</b
+        ><br />
+        Low: <b class="float-right">{{ Math.round(tooltipData.low * 100) / 100 }}</b
+        ><br />
+        Volume: <b class="float-right">{{ tooltipData.volume }}</b>
+      </div>
+    </Div>
+  </div>
   <div v-if="data.length != 0" class="flex gap-[10px] w-full justify-center">
     Area
     <ToggleSwitch v-model="checked" @change="changeMode" />
     Candlestick
   </div>
-  <Div id="chart-tooltips" class="text-xs/5 w-[200px] z-3 absolute hidden opacity-80">
-    <div v-if="tooltipData != null">
-      Date: <b class="float-right">{{ formatDate(new Date(tooltipData.timestamp)) }}</b
-      ><br />
-      Close: <b class="float-right">{{ Math.round(tooltipData.close * 100) / 100 }}</b
-      ><br />
-      Open: <b class="float-right">{{ Math.round(tooltipData.open * 100) / 100 }}</b
-      ><br />
-      High: <b class="float-right">{{ Math.round(tooltipData.high * 100) / 100 }}</b
-      ><br />
-      Low: <b class="float-right">{{ Math.round(tooltipData.low * 100) / 100 }}</b
-      ><br />
-      Volume: <b class="float-right">{{ tooltipData.volume }}</b>
-    </div>
-  </Div>
 </template>
 
 <style scoped></style>
