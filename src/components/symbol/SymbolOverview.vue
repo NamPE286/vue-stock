@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import type { CandleData } from '@/lib/stock';
+import type { CandleData, HeadlineData } from '@/lib/stock';
 import OverviewChart from './OverviewChart.vue';
 import Headline from './Headline.vue';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps<{
+defineProps<{
   chartData: CandleData[];
-  
+  headlines: HeadlineData[];
 }>();
 </script>
 
 <template>
-  <OverviewChart :data="chartData"/>
+  <OverviewChart :data="chartData" />
   <h2>Recent News</h2>
-  <Headline/>
+  <div class="flex flex-col gap-[10px]">
+    <Headline v-for="headline in headlines" :key="headline.id" :data="headline" />
+  </div>
 </template>
 
 <style scoped>

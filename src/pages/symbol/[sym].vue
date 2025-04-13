@@ -6,17 +6,23 @@ import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
-import { getSymbolHistoricalCandles, subscribeToPriceUpdates, getSymbolPrice, getSymbolNews } from '@/lib/stock';
-import type { CandleData, StockData } from '@/lib/stock';
+import {
+  getSymbolHistoricalCandles,
+  subscribeToPriceUpdates,
+  getSymbolPrice,
+  getSymbolNews,
+} from '@/lib/stock';
+import type { CandleData, StockData, HeadlineData } from '@/lib/stock';
 import { ref, onMounted } from 'vue';
-import type { Ref } from 'vue';
 import { useRoute } from 'vue-router/auto';
 
 const route = useRoute('/symbol/[sym]');
 const sym = route.params.sym.toUpperCase();
+
 let current = ref<StockData | null>(null);
 let name = ref<string>(sym);
-let candles: Ref<CandleData[]> = ref([]);
+let candles = ref<CandleData[]>([]);
+let headlines = ref<HeadlineData[]>([]);
 
 function updatePrice(stock: StockData) {
   current.value = stock;
@@ -29,10 +35,10 @@ onMounted(() => {
   subscribeToPriceUpdates(sym, updatePrice);
   getSymbolHistoricalCandles(sym).then((data) => {
     candles.value = data;
-  })
+  });
 
   getSymbolNews(sym).then((data) => {
-    console.log(data)
+    headlines.value = data;
   });
 });
 </script>
@@ -49,7 +55,7 @@ onMounted(() => {
     </div>
     <TabPanels>
       <TabPanel value="0">
-        <SymbolOverview :chart-data="candles" />
+        <SymbolOverview :chart-data="candles" :headlines="headlines"/>
       </TabPanel>
       <TabPanel value="1"> b </TabPanel>
       <TabPanel value="2"> c </TabPanel>
