@@ -20,7 +20,7 @@ onMounted(() => {
   getSymbolHistoricalCandles(props.sym).then((data) => {
     chartData.value = data;
   });
-  getSymbolNews(props.sym).then((data) => {
+  getSymbolNews(props.sym, 4).then((data) => {
     headlines.value = data;
   });
 });
@@ -30,7 +30,7 @@ onMounted(() => {
   <OverviewChart :data="chartData" />
   <h2>Recent News</h2>
   <div v-if="headlines.length == 0" class="grid grid-cols-1 lg:grid-cols-2 gap-[10px]">
-    <Headline v-for="_ in Array(8)" :key="_" :data="null" />
+    <Headline v-for="_ in Array(4)" :key="_" :data="null" />
   </div>
   <div v-if="headlines.length != 0" class="grid grid-cols-1 lg:grid-cols-2 gap-[10px]">
     <Headline v-for="headline in headlines" :key="headline.id" :data="headline" />

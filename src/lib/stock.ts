@@ -144,7 +144,7 @@ export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: Stoc
   });
 }
 
-export async function getSymbolNews(symbol: string) {
+export async function getSymbolNews(symbol: string, limit: number) {
   const end = new Date();
   const start = new Date(end.getTime() - 30 * 86400000);
   const res = await fetch(
@@ -167,5 +167,5 @@ export async function getSymbolNews(symbol: string) {
     });
   }
   
-  return result.slice(0, 8);
+  return result.slice(0, limit);
 }
