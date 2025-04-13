@@ -139,6 +139,21 @@ function updateChart(option = { area: true, candlestick: false }) {
     elem.style.transform = 'translate(-100px, 50px)';
     elem.style.display = 'block';
 
+    const chartElem = document.getElementById('chart');
+    if (chartElem) {
+      const chartRect = chartElem.getBoundingClientRect();
+      const tooltipRect = elem.getBoundingClientRect();
+      let left: number = param.point.x;
+      let top: number = param.point.y;
+
+      if (left > chartRect.width - tooltipRect.width + 30) {
+        left = chartRect.width - tooltipRect.width + 30;
+      }
+
+      elem.style.left = `${left}px`;
+      elem.style.top = `${top}px`;
+    }
+
     const data = param.seriesData.get(option.area ? areaSeries : candlestickSeries);
 
     if (map.has(Number(data?.time))) {
