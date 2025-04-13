@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
-import Div from './Div.vue';
 
 interface Link {
   url: string;
@@ -16,7 +15,7 @@ const links: Link[] = [
 </script>
 
 <template>
-  <div class="rounded-xl p-5 bg-[#f8fafc] dark:bg-[#18181b] w-full h-full flex flex-col justify-between">
+  <div class="p-5 bg-[#f8fafc] dark:bg-[#27272a] w-full h-full flex flex-col justify-between">
     <div class="flex flex-col h-[100%]">
       <div class="flex flex-col gap-1 items-center">
         <a href="/">

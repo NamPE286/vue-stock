@@ -6,14 +6,14 @@ import { RouterView } from 'vue-router/auto';
 </script>
 
 <template>
-  <div class="fixed w-[80px] h-full p-[10px] hidden md:block">
+  <div class="fixed w-[80px] h-full hidden md:block">
     <SideNavBar />
   </div>
   <div class="sticky top-0 z-10 h-[70px] w-full mb-[10px] md:hidden">
     <TopNavBar />
   </div>
-  <div class="md:ml-[80px] pr-[10px] relative">
-    <div class="sticky top-0 z-10 h-[50px] w-full mb-[10px] hidden md:block">
+  <div class="md:ml-[95px] pr-[10px] relative">
+    <div class="sticky top-0 z-10 h-[70px] w-full mb-[10px] hidden md:block">
       <AppBar />
     </div>
     <RouterView />
