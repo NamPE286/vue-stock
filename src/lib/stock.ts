@@ -73,17 +73,20 @@ export async function getSymbolProfile(symbol: string): Promise<ProfileData> {
 
 export async function getSymbolHistoricalCandles(symbol: string): Promise<CandleData[]> {
   const end = new Date();
-  end.setUTCHours(20, 0, 0, 0);
+
+  if (end.getUTCHours() > 20 || (end.getUTCHours() === 20 && end.getUTCMinutes() > 0)) {
+    end.setUTCHours(20, 0, 0, 0);
+  }
 
   const day = end.getUTCDay();
+
   if (day === 0) {
-    end.setUTCDate(end.getUTCDate() - 2);
+    end.setTime(end.getTime() - 2 * 86400000);
   } else if (day === 6) {
-    end.setUTCDate(end.getUTCDate() - 1);
+    end.setTime(end.getTime() - 86400000);
   }
 
   const start = new Date(end.getTime() - 23400000);
-
   const res = await fetch(
     `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/minute/${start.getTime()}/${end.getTime()}?adjusted=true&sort=asc&limit=50000&apiKey=${import.meta.env.VITE_POLYGON_KEY}`,
   );
@@ -124,7 +127,6 @@ export async function getSymbolPrice(symbol: string): Promise<StockData> {
 }
 
 export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: StockData) => void) {
-
   socket.addEventListener('open', function () {
     if (socket.readyState === WebSocket.OPEN) {
       return;
@@ -166,6 +168,6 @@ export async function getSymbolNews(symbol: string, limit: number) {
       url: entry.url,
     });
   }
-  
+
   return result.slice(0, limit);
 }

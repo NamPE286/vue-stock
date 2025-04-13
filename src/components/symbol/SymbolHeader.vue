@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import type { ProfileData, StockData } from '@/lib/stock';
 import { ref } from 'vue';
-import Select from 'primevue/select';
+import Badge from 'primevue/badge';
 import Skeleton from 'primevue/skeleton';
 
 const props = defineProps<{
   profile: ProfileData | null;
   data: StockData | null;
 }>();
-let market = 'NASDAQ';
-let imageLoaded = ref(false)
-const arr: string[] = ['NASDAQ'];
+let imageLoaded = ref(false);
 </script>
 
 <template>
@@ -23,12 +21,26 @@ const arr: string[] = ['NASDAQ'];
       </div>
     </div>
     <div v-else class="flex gap-[10px] items-center">
-      <Skeleton v-if="!imageLoaded" class="mr-[-75px]" shape="circle" width="65px" height="65px"></Skeleton>
-      <img class="h-[60px] aspect-square rounded-full" :src="profile.logo" @load="() => imageLoaded = true" />
+      <Skeleton
+        v-if="!imageLoaded"
+        class="mr-[-75px]"
+        shape="circle"
+        width="65px"
+        height="65px"
+      ></Skeleton>
+      <img
+        class="h-[60px] aspect-square rounded-full"
+        :src="profile.logo"
+        @load="() => (imageLoaded = true)"
+      />
       <div>
-        <h3 v-if="profile" class="font-bold text-xl">
-          {{ `${profile.name} (${profile.ticker})` }}
-        </h3>
+        <div >
+          <h3 v-if="profile" class="font-bold text-xl">
+            {{ profile.name }}
+            <Badge size="large">{{ profile.ticker }}</Badge>
+            <Badge size="large" class="ml-[5px]">{{ profile.exchange }}</Badge>
+          </h3>
+        </div>
         <p>
           <span v-if="data !== null" class="mr-[5px]">
             <span class="text-3xl font-bold">{{ data.price }}</span> {{ profile?.currency }}
@@ -51,12 +63,6 @@ const arr: string[] = ['NASDAQ'];
           </span>
         </p>
       </div>
-      <Select
-        v-model="market"
-        :options="arr"
-        placeholder="Select a market"
-        class="w-full md:w-56 ml-auto mr-[50px]"
-      ></Select>
     </div>
   </div>
 </template>

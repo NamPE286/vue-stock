@@ -33,21 +33,22 @@ onMounted(() => {
 </script>
 
 <template>
-  <Tabs value="0">
+  <Tabs value="overview">
     <div class="sticky pt-[10px] z-2 mt-[-10px] top-0 bg-[#ffffff] dark:bg-[#121212]">
       <SymbolHeader :profile="profile" :data="current"></SymbolHeader>
       <TabList>
-        <Tab value="0">Overview</Tab>
-        <Tab value="1">Profile</Tab>
-        <Tab value="2">Peers</Tab>
+        <Tab value="overview">Overview</Tab>
+        <Tab value="profile">Profile</Tab>
+        <Tab value="news">News</Tab>
+        <Tab value="historicalQuotes">Historical Quotes</Tab>
       </TabList>
     </div>
     <TabPanels>
-      <TabPanel value="0">
+      <TabPanel value="overview">
         <SymbolOverview :sym />
       </TabPanel>
-      <TabPanel value="1"> b </TabPanel>
-      <TabPanel value="2"> c </TabPanel>
+      <TabPanel value="profile"> b </TabPanel>
+      <TabPanel value="historicalQuotes"> c </TabPanel>
     </TabPanels>
   </Tabs>
 </template>
