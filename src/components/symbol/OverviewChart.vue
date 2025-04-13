@@ -152,6 +152,12 @@ function updateChart(option = { area: true, candlestick: false }) {
   });
 
   chart.timeScale().fitContent();
+
+  const logo = document.getElementById('tv-attr-logo');
+
+  if (logo) {
+    logo.remove();
+  }
 }
 
 watch(
