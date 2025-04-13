@@ -32,15 +32,43 @@ export interface HeadlineData {
   url: string;
 }
 
+export interface ProfileData {
+  country: string;
+  currency: string;
+  exchange: string;
+  ipo: Date;
+  marketCapitalization: number;
+  name: string;
+  phone: string;
+  shareOutstanding: number;
+  ticker: string;
+  weburl: string;
+  logo: string;
+  finnhubIndustry: string;
+}
+
 const socket = new WebSocket(`wss://ws.finnhub.io?token=${import.meta.env.VITE_FH_KEY}`);
 
-export async function getSymbolName(symbol: string): Promise<string> {
+export async function getSymbolProfile(symbol: string): Promise<ProfileData> {
   const res = await fetch(
-    `https://finnhub.io/api/v1/search?q=${symbol}&token=${import.meta.env.VITE_FH_KEY}`,
+    `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${import.meta.env.VITE_FH_KEY}`,
   );
   const data = await res.json();
 
-  return data.result[0].description;
+  return {
+    country: data.country,
+    currency: data.currency,
+    exchange: data.exchange,
+    ipo: new Date(data.ipo),
+    marketCapitalization: data.marketCapitalization,
+    name: data.name,
+    phone: data.phone,
+    shareOutstanding: data.shareOutstanding,
+    ticker: data.ticker,
+    weburl: data.weburl,
+    logo: data.logo,
+    finnhubIndustry: data.finnhubIndustry,
+  };
 }
 
 export async function getSymbolHistoricalCandles(symbol: string): Promise<CandleData[]> {
@@ -105,18 +133,9 @@ export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: Stoc
       return;
     }
 
-    const data = event.data.data;
+    const data = event.data;
 
-    callbackFn({
-      price: data.c,
-      change: data.d,
-      percentChange: data.dp,
-      high: data.h,
-      low: data.l,
-      open: data.o,
-      previousClose: data.pc,
-      timestamp: new Date(data.t * 1000),
-    });
+    // TODO: convert to StockData and pass to callbackFn
   });
 }
 
