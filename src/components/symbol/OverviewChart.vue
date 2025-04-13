@@ -92,7 +92,7 @@ function updateChart(option = { area: true, candlestick: false }) {
 
   const areaSeries = chart.addSeries(AreaSeries, {
     lineColor: isProfit ? '#00c951' : '#ca0a22',
-    topColor: isProfit ? '#00c951' : '#ca0a22',
+    topColor: isProfit ? '#0b5d2c' : '#670e1a',
     bottomColor: isProfit ? 'rgba(0, 201, 81, 0.28)' : 'rgba(202, 10, 34, 0.28)',
   });
 

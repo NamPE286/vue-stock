@@ -1,12 +1,29 @@
 <script setup lang="ts">
-import type { CandleData, HeadlineData } from '@/lib/stock';
 import OverviewChart from './OverviewChart.vue';
 import Headline from './Headline.vue';
+import { onMounted } from 'vue';
+import {
+  getSymbolHistoricalCandles,
+  getSymbolNews,
+} from '@/lib/stock';
+import type { CandleData, HeadlineData } from '@/lib/stock';
+import { ref } from 'vue';
 
-defineProps<{
-  chartData: CandleData[];
-  headlines: HeadlineData[];
-}>();
+const props = defineProps<{
+  sym: string
+}>()
+
+let chartData = ref<CandleData[]>([])
+let headlines=  ref<HeadlineData[]>([])
+
+onMounted(() => {
+  getSymbolHistoricalCandles(props.sym).then((data) => {
+    chartData.value = data;
+  });
+  getSymbolNews(props.sym).then((data) => {
+    headlines.value = data;
+  });
+});
 </script>
 
 <template>
