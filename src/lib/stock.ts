@@ -107,3 +107,7 @@ export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: Stoc
     });
   });
 }
+
+export function getSymbolNews(symbol: string) {
+  
+}

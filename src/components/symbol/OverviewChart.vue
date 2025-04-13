@@ -63,7 +63,7 @@ function updateChart(option = { area: true, candlestick: false }) {
   // @ts-ignore
   chart = createChart(document.getElementById('chart'), {
     layout: {
-      textColor: 'white',
+      textColor: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black',
       background: {
         type: 'solid',
         color: 'transparent',
@@ -159,12 +159,12 @@ window.addEventListener('resize', () => {
   }
 });
 
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  updateChart({ area: !checked, candlestick: checked });
+});
+
 function changeMode() {
-  if (checked) {
-    updateChart({ area: false, candlestick: true });
-  } else {
-    updateChart({ area: true, candlestick: false });
-  }
+  updateChart({ area: !checked, candlestick: checked });
 }
 
 onMounted(() => {
@@ -176,11 +176,16 @@ onMounted(() => {
   <div id="chart" class="w-full h-[350px]"></div>
   <Div id="chart-tooltips" class="text-xs/5 w-[200px] z-3 absolute hidden opacity-85">
     <div v-if="tooltipData != null">
-      Date: <b class="float-right">{{ new Date(tooltipData.timestamp).toDateString() }}</b><br />
-      Close: <b class="float-right">{{ Math.round(tooltipData.close * 100) / 100 }}</b><br />
-      Open: <b class="float-right">{{ Math.round(tooltipData.open * 100) / 100 }}</b><br />
-      High: <b class="float-right">{{ Math.round(tooltipData.high * 100) / 100 }}</b><br />
-      Low: <b class="float-right">{{ Math.round(tooltipData.low * 100) / 100 }}</b><br />
+      Date: <b class="float-right">{{ new Date(tooltipData.timestamp).toDateString() }}</b
+      ><br />
+      Close: <b class="float-right">{{ Math.round(tooltipData.close * 100) / 100 }}</b
+      ><br />
+      Open: <b class="float-right">{{ Math.round(tooltipData.open * 100) / 100 }}</b
+      ><br />
+      High: <b class="float-right">{{ Math.round(tooltipData.high * 100) / 100 }}</b
+      ><br />
+      Low: <b class="float-right">{{ Math.round(tooltipData.low * 100) / 100 }}</b
+      ><br />
       Volume: <b class="float-right">{{ tooltipData.volume }}</b>
     </div>
   </Div>

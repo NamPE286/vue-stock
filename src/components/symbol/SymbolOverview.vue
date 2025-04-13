@@ -10,7 +10,7 @@ const props = defineProps<{
 
 <template>
   <OverviewChart :data="data"/>
-  <h2>News</h2>
+  <h2>Recent News</h2>
 </template>
 
 <style scoped>
