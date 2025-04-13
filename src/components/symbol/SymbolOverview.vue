@@ -12,7 +12,10 @@ defineProps<{
 <template>
   <OverviewChart :data="chartData" />
   <h2>Recent News</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-[10px]">
+  <div v-if="headlines.length == 0" class="grid grid-cols-1 lg:grid-cols-2 gap-[10px]">
+    <Headline v-for="_ in Array(8)" :key="_" :data="null" />
+  </div>
+  <div v-if="headlines.length != 0" class="grid grid-cols-1 lg:grid-cols-2 gap-[10px]">
     <Headline v-for="headline in headlines" :key="headline.id" :data="headline" />
   </div>
 </template>
