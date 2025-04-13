@@ -20,7 +20,7 @@ const arr: string[] = ['NASDAQ'];
           <span v-if="data !== null" >
             <span class="text-3xl font-bold">{{ data.price }}</span> USD
           </span>
-          <Skeleton v-if="data === null" class="mt-[3px]" width="12rem" height="2.5rem"></Skeleton>
+          <Skeleton v-if="data === null" class="mt-[3px]" width="12rem" height="2.1rem"></Skeleton>
           <span v-if="data !== null">
             <span v-if="data.change >= 0" class="font-bold text-green-500 text-lg">
               {{ props.data === null ? '' : `+${data?.change} (+${Math.round(data?.percentChange! * 100) / 100}%)` }}

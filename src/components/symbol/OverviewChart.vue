@@ -6,6 +6,7 @@ import { onMounted, watch } from 'vue';
 import ToggleSwitch from 'primevue/toggleswitch';
 import Div from '../Div.vue';
 import { ref } from 'vue';
+import Skeleton from 'primevue/skeleton';
 
 const props = defineProps<{
   data: Candle[];
@@ -47,8 +48,8 @@ function insertGap(
 }
 
 function updateChart(option = { area: true, candlestick: false }) {
-  if(props.data.length == 0) {
-    return
+  if (props.data.length == 0) {
+    return;
   }
 
   map.clear();
@@ -64,7 +65,7 @@ function updateChart(option = { area: true, candlestick: false }) {
     );
   }
 
-  const isProfit = (props.data[props.data.length - 1].close > props.data[0].close);
+  const isProfit = props.data[props.data.length - 1].close > props.data[0].close;
   // @ts-ignore
   chart = createChart(document.getElementById('chart'), {
     layout: {
@@ -140,7 +141,7 @@ function updateChart(option = { area: true, candlestick: false }) {
 
     const data = param.seriesData.get(option.area ? areaSeries : candlestickSeries);
 
-    if(map.has(Number(data?.time))) {
+    if (map.has(Number(data?.time))) {
       tooltipData.value = map.get(Number(data?.time))!;
     }
   });
@@ -188,7 +189,13 @@ onMounted(() => {
 </script>
 
 <template>
+  <Skeleton v-if="data.length == 0" class="w-full mb-[-350px]" height="375px"></Skeleton>
   <div id="chart" class="w-full h-[350px]"></div>
+  <div v-if="data.length != 0" class="flex gap-[10px] w-full justify-center">
+    Area
+    <ToggleSwitch v-model="checked" @change="changeMode" />
+    Candlestick
+  </div>
   <Div id="chart-tooltips" class="text-xs/5 w-[200px] z-3 absolute hidden opacity-85">
     <div v-if="tooltipData != null">
       Date: <b class="float-right">{{ formatDate(new Date(tooltipData.timestamp)) }}</b
@@ -204,11 +211,6 @@ onMounted(() => {
       Volume: <b class="float-right">{{ tooltipData.volume }}</b>
     </div>
   </Div>
-  <div class="flex gap-[10px] w-full justify-center">
-    Area
-    <ToggleSwitch v-model="checked" @change="changeMode" />
-    Candlestick
-  </div>
 </template>
 
 <style scoped></style>
