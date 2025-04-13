@@ -90,9 +90,9 @@ function updateChart(option = { area: true, candlestick: false }) {
   }));
 
   const areaSeries = chart.addSeries(AreaSeries, {
-    lineColor: isProfit ? '#00aa76' : '#ca0a22',
-    topColor: isProfit ? '#00aa76' : '#ca0a22',
-    bottomColor: isProfit ? 'rgba(0, 170, 118, 0.28)' : 'rgba(202, 10, 34, 0.28)',
+    lineColor: isProfit ? '#00c951' : '#ca0a22',
+    topColor: isProfit ? '#00c951' : '#ca0a22',
+    bottomColor: isProfit ? 'rgba(0, 201, 81, 0.28)' : 'rgba(202, 10, 34, 0.28)',
   });
 
   const candlestickData = props.data.map((candle) => ({
