@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AreaSeries, CandlestickSeries, createChart } from 'lightweight-charts';
-import type { Candle } from '@/lib/stock';
+import type { CandleData } from '@/lib/stock';
 import type { IChartApi } from 'lightweight-charts';
 import { onMounted, watch } from 'vue';
 import ToggleSwitch from 'primevue/toggleswitch';
@@ -9,13 +9,13 @@ import { ref } from 'vue';
 import Skeleton from 'primevue/skeleton';
 
 const props = defineProps<{
-  data: Candle[];
+  data: CandleData[];
 }>();
 
-const map = new Map<number, Candle>();
+const map = new Map<number, CandleData>();
 let chart: IChartApi | null = null;
 let checked = false;
-let tooltipData = ref<Candle | null>(null);
+let tooltipData = ref<CandleData | null>(null);
 
 function insertGap(
   data: {

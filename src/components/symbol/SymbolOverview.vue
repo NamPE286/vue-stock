@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { Candle } from '@/lib/stock';
+import type { CandleData } from '@/lib/stock';
 import OverviewChart from './OverviewChart.vue';
-import News from './News.vue';
+import Headline from './Headline.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
-  chartData: Candle[];
+  chartData: CandleData[];
 }>();
 </script>
 
 <template>
   <OverviewChart :data="chartData"/>
   <h2>Recent News</h2>
-  <News/>
+  <Headline/>
 </template>
 
 <style scoped>

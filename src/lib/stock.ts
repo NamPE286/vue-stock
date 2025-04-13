@@ -1,4 +1,4 @@
-export interface Candle {
+export interface CandleData {
   timestamp: Date;
   open: number;
   high: number;
@@ -9,7 +9,7 @@ export interface Candle {
   transaction: number;
 }
 
-export interface Stock {
+export interface StockData {
   timestamp: Date;
   price: number;
   change: number;
@@ -19,6 +19,8 @@ export interface Stock {
   open: number;
   previousClose: number;
 }
+
+
 
 const socket = new WebSocket(`wss://ws.finnhub.io?token=${import.meta.env.VITE_FH_KEY}`);
 
@@ -31,7 +33,7 @@ export async function getSymbolName(symbol: string): Promise<string> {
   return data.result[0].description;
 }
 
-export async function getSymbolHistoricalCandles(symbol: string): Promise<Candle[]> {
+export async function getSymbolHistoricalCandles(symbol: string): Promise<CandleData[]> {
   const end = new Date();
   end.setUTCHours(20, 0, 0, 0);
 
@@ -48,7 +50,7 @@ export async function getSymbolHistoricalCandles(symbol: string): Promise<Candle
     `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/minute/${start.getTime()}/${end.getTime()}?adjusted=true&sort=asc&limit=50000&apiKey=${import.meta.env.VITE_POLYGON_KEY}`,
   );
   const data = await res.json();
-  const result: Candle[] = [];
+  const result: CandleData[] = [];
 
   for (const entry of data.results) {
     result.push({
@@ -65,7 +67,7 @@ export async function getSymbolHistoricalCandles(symbol: string): Promise<Candle
   return result;
 }
 
-export async function getSymbolPrice(symbol: string): Promise<Stock> {
+export async function getSymbolPrice(symbol: string): Promise<StockData> {
   const res = await fetch(
     `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${import.meta.env.VITE_FH_KEY}`,
   );
@@ -83,7 +85,7 @@ export async function getSymbolPrice(symbol: string): Promise<Stock> {
   };
 }
 
-export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: Stock) => void) {
+export function subscribeToPriceUpdates(symbol: string, callbackFn: (stock: StockData) => void) {
   socket.addEventListener('open', function () {
     socket.send(JSON.stringify({ type: 'subscribe', symbol: symbol }));
   });

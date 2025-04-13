@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { Stock } from '@/lib/stock';
+import type { StockData } from '@/lib/stock';
 import Select from 'primevue/select';
 import Skeleton from 'primevue/skeleton';
 
 const props = defineProps<{
   name: string
-  data: Stock | null;
+  data: StockData | null;
 }>();
 let market = 'NASDAQ';
 const arr: string[] = ['NASDAQ'];
