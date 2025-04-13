@@ -139,7 +139,10 @@ function updateChart(option = { area: true, candlestick: false }) {
     elem.style.display = 'block';
 
     const data = param.seriesData.get(option.area ? areaSeries : candlestickSeries);
-    tooltipData.value = map.get(Number(data?.time))!;
+
+    if(map.has(Number(data?.time))) {
+      tooltipData.value = map.get(Number(data?.time))!;
+    }
   });
 
   chart.timeScale().applyOptions({
@@ -172,6 +175,13 @@ function changeMode() {
   updateChart({ area: !checked, candlestick: checked });
 }
 
+function formatDate(date: Date) {
+  const minutes = date.getMinutes();
+  const paddedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  return `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${paddedMinutes}`;
+}
+
 onMounted(() => {
   updateChart({ area: true, candlestick: false });
 });
@@ -181,7 +191,7 @@ onMounted(() => {
   <div id="chart" class="w-full h-[350px]"></div>
   <Div id="chart-tooltips" class="text-xs/5 w-[200px] z-3 absolute hidden opacity-85">
     <div v-if="tooltipData != null">
-      Date: <b class="float-right">{{ new Date(tooltipData.timestamp).toDateString() }}</b
+      Date: <b class="float-right">{{ formatDate(new Date(tooltipData.timestamp)) }}</b
       ><br />
       Close: <b class="float-right">{{ Math.round(tooltipData.close * 100) / 100 }}</b
       ><br />
