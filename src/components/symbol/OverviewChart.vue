@@ -48,24 +48,30 @@ function insertGap(
 }
 
 function updateChart(option = { area: true, candlestick: false }) {
-  if (props.data.length == 0) {
+  if (props.data.length === 0) {
     return;
   }
+
+  const lastTimestamp = new Date(props.data[props.data.length - 1].timestamp).getTime();
+  const cutoff = lastTimestamp - 12 * 3600 * 1000;
+  const filteredData = props.data.filter(
+    candle => new Date(candle.timestamp).getTime() >= cutoff,
+  );
 
   map.clear();
 
   if (chart !== null) {
-    chart?.remove();
+    chart.remove();
   }
 
-  for (const i of props.data) {
+  for (const i of filteredData) {
     map.set(
       Math.floor(new Date(i.timestamp).getTime() / 1000) - new Date().getTimezoneOffset() * 60,
       i,
     );
   }
-
-  const isProfit = props.data[props.data.length - 1].close > props.data[0].close;
+  console.log(filteredData)
+  const isProfit = filteredData[filteredData.length - 1].close > filteredData[0].close;
   // @ts-ignore
   chart = createChart(document.getElementById('chart'), {
     layout: {
@@ -84,7 +90,7 @@ function updateChart(option = { area: true, candlestick: false }) {
       },
     },
   });
-  const areaData = props.data.map((candle) => ({
+  const areaData = filteredData.map((candle) => ({
     time:
       Math.floor(new Date(candle.timestamp).getTime() / 1000) - new Date().getTimezoneOffset() * 60,
     value: candle.close,
@@ -96,7 +102,7 @@ function updateChart(option = { area: true, candlestick: false }) {
     bottomColor: isProfit ? 'rgba(0, 201, 81, 0.28)' : 'rgba(202, 10, 34, 0.28)',
   });
 
-  const candlestickData = props.data.map((candle) => ({
+  const candlestickData = filteredData.map((candle) => ({
     time:
       Math.floor(new Date(candle.timestamp).getTime() / 1000) - new Date().getTimezoneOffset() * 60,
     open: candle.open,
@@ -130,7 +136,6 @@ function updateChart(option = { area: true, candlestick: false }) {
       if (elem) {
         elem.style.display = 'none';
       }
-
       return;
     }
 
