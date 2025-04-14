@@ -73,7 +73,7 @@ export async function getSymbolProfile(symbol: string): Promise<ProfileData> {
 
 export async function getSymbolHistoricalCandles(symbol: string): Promise<CandleData[]> {
   const end = new Date();
-  const start = new Date(end.getTime() - 3 * 86400000);
+  const start = new Date(end.getTime() - 30 * 86400000);
 
   const res = await fetch(
     `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/minute/${start.getTime()}/${end.getTime()}?adjusted=true&sort=asc&limit=50000&apiKey=${import.meta.env.VITE_POLYGON_KEY}`,
