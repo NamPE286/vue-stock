@@ -8,8 +8,8 @@ import { RouterView } from 'vue-router/auto';
   <div class="fixed w-[80px] h-full hidden md:block">
     <SideNavBar />
   </div>
-  <div class="md:ml-[95px] pr-[10px] relative">
-    <div class="sticky top-0 z-10 h-[70px] w-full mb-[10px]">
+  <div class="md:ml-[95px] md:pr-[10px] relative">
+    <div class="sticky top-0 z-10 pr-[5px] h-[70px] w-full mb-[10px]">
       <TopBar />
     </div>
     <RouterView />

@@ -16,6 +16,7 @@ const map = new Map<number, CandleData>();
 let chart: IChartApi | null = null;
 let checked = false;
 let tooltipData = ref<CandleData | null>(null);
+let range = 12;
 
 function insertGap(
   data: {
@@ -53,7 +54,7 @@ function updateChart(option = { area: true, candlestick: false }) {
   }
 
   const lastTimestamp = new Date(props.data[props.data.length - 1].timestamp).getTime();
-  const cutoff = lastTimestamp - 12 * 3600 * 1000;
+  const cutoff = lastTimestamp - range * 3600 * 1000;
   const filteredData = props.data.filter(
     candle => new Date(candle.timestamp).getTime() >= cutoff,
   );
@@ -70,7 +71,7 @@ function updateChart(option = { area: true, candlestick: false }) {
       i,
     );
   }
-  console.log(filteredData)
+
   const isProfit = filteredData[filteredData.length - 1].close > filteredData[0].close;
   // @ts-ignore
   chart = createChart(document.getElementById('chart'), {

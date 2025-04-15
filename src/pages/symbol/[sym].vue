@@ -62,4 +62,8 @@ onMounted(() => {
 .p-tablist * {
   background-color: transparent;
 }
+
+.p-tablist {
+  overflow: hidden;
+}
 </style>
